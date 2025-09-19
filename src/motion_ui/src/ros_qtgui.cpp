@@ -70,6 +70,9 @@ ros_qtgui::ros_qtgui(QWidget *parent)
     move_tcp_publisher_ = this->create_publisher<geometry_msgs::msg::Pose>(
         "/move_tcp", 10);
 
+    test_forward_position_controller_publisher_ = this->create_publisher<my_custom_msgs::msg::TestForwardPositionController>(
+        "/test_forward_position_controller_topic", 10);
+
     // 初始化订阅者
     velocity_curve_subscription_ = this->create_subscription<geometry_msgs::msg::TwistStamped>(
         "/velocity_curve", 10,
@@ -574,4 +577,31 @@ void ros_qtgui::on_pushButton_move_tcp_clicked()
     msg_move.orientation.z = 0;
     msg_move.orientation.w = 0;
     move_tcp_publisher_->publish(msg_move);
+}
+
+void ros_qtgui::on_doubleSpinBox_test_forward_position_controller_printing_velocity_valueChanged(double arg1)
+{
+    test_forward_position_controller_printing_velocity = arg1;
+}
+
+
+void ros_qtgui::on_spinBox_test_forward_position_controller_control_period_valueChanged(int arg1)
+{
+    test_forward_position_controller_control_period = arg1 * 0.001;
+}
+
+
+void ros_qtgui::on_textEdit_test_forward_position_controller_file_path_textChanged()
+{
+    text_test_forward_position_controller_file_path = ui->textEdit_test_forward_position_controller_file_path->toPlainText().toStdString();
+}
+
+
+void ros_qtgui::on_pushButton_test_forward_position_controller_clicked()
+{
+    auto msg_test_forward_position_controller = my_custom_msgs::msg::TestForwardPositionController();
+    msg_test_forward_position_controller.control_period = test_forward_position_controller_control_period;
+    msg_test_forward_position_controller.printing_velocity = test_forward_position_controller_printing_velocity;
+    msg_test_forward_position_controller.file_path = text_test_forward_position_controller_file_path;
+    test_forward_position_controller_publisher_->publish(msg_test_forward_position_controller);
 }

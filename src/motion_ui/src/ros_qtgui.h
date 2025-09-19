@@ -11,6 +11,7 @@
 #include "std_msgs/msg/bool.hpp"
 #include "my_custom_msgs/msg/diw_ui_print.hpp"
 #include "my_custom_msgs/msg/trajectory_output.hpp"
+#include "my_custom_msgs/msg/test_forward_position_controller.hpp"
 #include "geometry_msgs/msg/twist_stamped.hpp"
 #include "geometry_msgs/msg/pose.hpp"
 #include "sensor_msgs/msg/joint_state.hpp"
@@ -95,6 +96,14 @@ private slots:
 
 
 
+    void on_doubleSpinBox_test_forward_position_controller_printing_velocity_valueChanged(double arg1);
+
+    void on_spinBox_test_forward_position_controller_control_period_valueChanged(int arg1);
+
+    void on_textEdit_test_forward_position_controller_file_path_textChanged();
+
+    void on_pushButton_test_forward_position_controller_clicked();
+
 private:
     Ui::ros_qtgui *ui;
     QLabel *label_pressure_control_state;
@@ -124,6 +133,10 @@ private:
     // 移动末端点
     double move_tcp_x = 0, move_tcp_y = 0, move_tcp_z =0;
 
+    // test_forward_position_controller参数
+    double test_forward_position_controller_printing_velocity = 1.0, test_forward_position_controller_control_period = 0.008;
+    std::string text_test_forward_position_controller_file_path = "/home/xht/桌面/test.txt";
+
     std::shared_ptr<rviz_common::RenderPanel> _render_panel;
     std::shared_ptr<rviz_common::ros_integration::RosNodeAbstraction> _rvizRosNodeTmp;
     rviz_common::ros_integration::RosNodeAbstractionIface::WeakPtr _rvizRosNode;
@@ -142,6 +155,7 @@ private:
     rclcpp::Publisher<std_msgs::msg::Bool>::SharedPtr torque_correction_publisher_;
     rclcpp::Publisher<my_custom_msgs::msg::TrajectoryOutput>::SharedPtr whether_trajectory_output_publisher_;
     rclcpp::Publisher<geometry_msgs::msg::Pose>::SharedPtr move_tcp_publisher_;
+    rclcpp::Publisher<my_custom_msgs::msg::TestForwardPositionController>::SharedPtr test_forward_position_controller_publisher_;
 
     rclcpp::Subscription<geometry_msgs::msg::TwistStamped>::SharedPtr velocity_curve_subscription_;
     rclcpp::Subscription<std_msgs::msg::Float32>::SharedPtr realtime_pressure_subscription_;
